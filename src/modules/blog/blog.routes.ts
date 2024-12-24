@@ -19,13 +19,7 @@ blogRoutes.patch('/:id', auth('user'), blogController.updateBlog);
 
 blogRoutes.delete(
   '/:id',
-  auth('user', 'admin'),
-  validateRequest(blogValidationSchema.updateBlogValidationSchema),
-  blogController.deleteBlog,
-);
-blogRoutes.delete(
-  '/admin/blogs/:id',
-  auth('admin'),
+  auth('user'),
   validateRequest(blogValidationSchema.updateBlogValidationSchema),
   blogController.deleteBlog,
 );
