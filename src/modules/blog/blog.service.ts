@@ -29,12 +29,23 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
   return result;
 };
 
-const updateBlogInDB = async (id: string, payload: Partial<TBlog>) => {
+const updateBlogInDB = async (
+  id: string,
+  userId: string,
+  payload: Partial<TBlog>,
+) => {
   // Find the blog by ID
   const blog = await BlogModel.findById(id);
 
   if (!blog) {
     throw new AppError(StatusCodes.NOT_FOUND, 'Blog not found');
+  }
+
+  if (blog.author.toString() !== userId) {
+    throw new AppError(
+      StatusCodes.FORBIDDEN,
+      'You are not authorized to update this blog',
+    );
   }
 
   const result = await BlogModel.findByIdAndUpdate(id, payload, {
@@ -47,14 +58,37 @@ const updateBlogInDB = async (id: string, payload: Partial<TBlog>) => {
   return result;
 };
 
-const deleteBlogFromDB = async (id: string) => {
+const deleteBlogFromDB = async (
+  id: string,
+  userId: string,
+  // userRole: string,
+) => {
   const deleteBlogId = await BlogModel.findById(id);
+  console.log(deleteBlogId);
+
   if (!deleteBlogId) {
     throw new AppError(StatusCodes.NOT_FOUND, 'Blog not found');
   }
+
+  // if (userRole !== 'admin') {
+  if (deleteBlogId?.author.toString() !== userId) {
+    throw new AppError(
+      StatusCodes.FORBIDDEN,
+      'You are not authorized to delete this blog',
+    );
+  }
+  // }
+
   const result = await BlogModel.findByIdAndDelete(id);
   return result;
 };
+
+// if (deleteBlogId?.author.toString() !== userId) {
+//   throw new AppError(
+//     StatusCodes.FORBIDDEN,
+//     'You are not authorized to update this blog',
+//   );
+// }
 
 export const blogServices = {
   createBlogIntoDB,

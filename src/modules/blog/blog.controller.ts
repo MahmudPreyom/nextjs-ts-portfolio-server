@@ -58,14 +58,14 @@ const getAllBlogs = catchAsync(async (req, res) => {
 
 const updateBlog = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const result = await blogServices.updateBlogInDB(id, req.body);
-  // const blogId = req.params.id;
   const userId = req.user?._id;
+  const result = await blogServices.updateBlogInDB(id, userId, req.body);
+  // const blogId = req.params.id;
   console.log(userId);
 
-  if (result?.author.toString() !== userId.toString()) {
-    throw new AppError(StatusCodes.BAD_REQUEST, 'You are not authorized');
-  }
+  // if (result?.author.toString() !== userId.toString()) {
+  //   throw new AppError(StatusCodes.BAD_REQUEST, 'You are not authorized');
+  // }
   // console.log(userId);
 
   sendResponse(res, {
@@ -84,7 +84,12 @@ const updateBlog = catchAsync(async (req, res) => {
 
 const deleteBlog = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const result = await blogServices.deleteBlogFromDB(id);
+  const userId = req.user?._id;
+  // const userRole = req.user?.role;
+  // console.log(userId);
+  // console.log(userRole);
+
+  const result = await blogServices.deleteBlogFromDB(id, userId);
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,

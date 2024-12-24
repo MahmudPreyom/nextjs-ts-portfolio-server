@@ -8,9 +8,15 @@ import auth from '../../middlewares/auth';
 const userRoutes = Router();
 userRoutes.post(
   '/create-admin',
-  auth(USER_ROLE.admin),
   validateRequest(UserValidation.userValidationSchema),
   userControllers.createUser,
+);
+
+userRoutes.delete(
+  '/:id',
+  auth('admin'),
+  // validateRequest(UserValidation.userValidationSchema),
+  userControllers.deleteBlog,
 );
 
 userRoutes.get(

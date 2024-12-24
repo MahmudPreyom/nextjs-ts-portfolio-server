@@ -13,6 +13,7 @@ app.use(cors());
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/blogs', blogRoutes);
+app.use('/api/admin/blogs', userRoutes);
 
 app.use(globalErrorHandler);
 

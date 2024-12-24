@@ -30,7 +30,22 @@ const getUser = catchAsync(async (req, res) => {
   });
 });
 
+const deleteBlog = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const userRole = req.user?.role;
+  console.log(userRole);
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  const result = await userService.deleteBlogFromDBByAdmin(id, userRole);
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Blog deleted successfully by admin',
+  });
+});
+
 export const userControllers = {
   createUser,
   getUser,
+  deleteBlog,
 };
