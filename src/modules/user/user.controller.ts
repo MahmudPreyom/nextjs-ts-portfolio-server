@@ -30,6 +30,18 @@ const getUser = catchAsync(async (req, res) => {
   });
 });
 
+const updateUserBlockStatus = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+  const result = await userService.updateUserBlockStatusIntoDb(id);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Users blocked successfully',
+    // data: result,
+  });
+});
+
 const deleteBlog = catchAsync(async (req, res) => {
   const { id } = req.params;
   const userRole = req.user?.role;
@@ -47,5 +59,6 @@ const deleteBlog = catchAsync(async (req, res) => {
 export const userControllers = {
   createUser,
   getUser,
+  updateUserBlockStatus,
   deleteBlog,
 };

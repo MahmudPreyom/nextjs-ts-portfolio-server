@@ -1,12 +1,17 @@
 import QueryBuilder from '../../app/builder/QueryBuilder';
 import AppError from '../../app/errors/AppError';
+import { User } from '../user/user.model';
 // import { User } from '../user/user.model';
 import { BlogSearchableFields } from './blog.const';
 import { TBlog } from './blog.interface';
 import { BlogModel } from './blog.model';
 import { StatusCodes } from 'http-status-codes';
 
-const createBlogIntoDB = async (payload: TBlog) => {
+const createBlogIntoDB = async (payload: TBlog, id: string) => {
+  const userId = await User.findById(id);
+  if (!userId?._id) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'User not found');
+  }
   const result = (await BlogModel.create(payload)).populate(
     'author',
     'name email role',

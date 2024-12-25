@@ -21,6 +21,17 @@ const userValidationSchema = z.object({
   }),
 });
 
+const updateUserValidationSchema = z.object({
+  body: z.object({
+    isBlocked: z
+      .boolean({
+        required_error: 'Its must be true or false',
+      })
+      .optional(),
+  }),
+});
+
 export const UserValidation = {
   userValidationSchema,
+  updateUserValidationSchema,
 };

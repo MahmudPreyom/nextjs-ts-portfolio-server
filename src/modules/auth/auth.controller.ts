@@ -6,12 +6,13 @@ import { AuthServices } from './auth.service';
 
 const register = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthServices.register(req.body);
+  // const {name ,email} = resultRegister
 
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.CREATED,
     message: 'User registered successfully',
-    data: result,
+    data: { _id: result._id, name: result?.name, email: result?.email },
   });
 });
 

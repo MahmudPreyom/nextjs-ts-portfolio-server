@@ -16,6 +16,28 @@ const getUser = async () => {
   return result;
 };
 
+const updateUserBlockStatusIntoDb = async (id: string) => {
+  const userId = await User.findById(id);
+
+  if (!userId) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'User not found');
+  }
+
+  if (userId?.isBlocked) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'user already blocked');
+  }
+
+  const result = await User.findByIdAndUpdate(
+    id,
+    { isBlocked: true },
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
+  return result;
+};
+
 const deleteBlogFromDBByAdmin = async (id: string, userRole: string) => {
   const deleteBlogId = await BlogModel.findById(id);
   console.log(deleteBlogId);
@@ -38,5 +60,6 @@ const deleteBlogFromDBByAdmin = async (id: string, userRole: string) => {
 export const userService = {
   createUserIntoDB,
   getUser,
+  updateUserBlockStatusIntoDb,
   deleteBlogFromDBByAdmin,
 };

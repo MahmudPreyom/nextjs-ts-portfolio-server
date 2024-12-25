@@ -29,7 +29,7 @@ const createBlog = catchAsync(async (req, res) => {
     author: author,
   };
 
-  const result = await blogServices.createBlogIntoDB(blogData);
+  const result = await blogServices.createBlogIntoDB(blogData, author);
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,

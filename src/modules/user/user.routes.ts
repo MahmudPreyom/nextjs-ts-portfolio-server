@@ -19,6 +19,13 @@ userRoutes.delete(
   userControllers.deleteBlog,
 );
 
+userRoutes.patch(
+  '/:id/block',
+  auth('admin'),
+  validateRequest(UserValidation.updateUserValidationSchema),
+  userControllers.updateUserBlockStatus,
+);
+
 userRoutes.get(
   '/',
   auth(USER_ROLE.admin, USER_ROLE.user),
