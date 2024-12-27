@@ -17,7 +17,7 @@ const login = async (payload: TLoginUser) => {
   const user = await User.findOne({ email: payload?.email }).select(
     '+password',
   );
-  // console.log(user);
+
   if (!user) {
     throw new AppError(StatusCodes.NOT_FOUND, 'This user is not found !');
   }
@@ -34,29 +34,21 @@ const login = async (payload: TLoginUser) => {
   );
 
   if (!isPasswordMatch) {
-    throw new Error('Password can not match!');
+    throw new AppError(StatusCodes.UNAUTHORIZED, 'Password can not match!');
   }
 
-  // jwt.sign({ email: user?.email }, 'secret', { expiresIn: '30d' });
-
   const token = jwt.sign(
-    // { email: user?.email, role: user?.role, id: user?._id },
-    { _id: user._id, email: user.email, role: user.role },
+    {
+      _id: user._id,
+      email: user.email,
+      role: user.role,
+    },
     config.jwt_access_secret as string,
     { expiresIn: '40d' },
   );
 
-  // const verifiedUser = {
-  //   name: user?.name,
-  //   email: user?.email,
-  //   id: user?._id,
-  //   role: user?.role,
-  // };
-
   // eslint-disable-next-line no-unused-vars
   const { password, ...remainingData } = user;
-
-  // console.log(verifiedUser);
 
   return { token, remainingData };
 };

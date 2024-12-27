@@ -6,7 +6,6 @@ import { AuthServices } from './auth.service';
 
 const register = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthServices.register(req.body);
-  // const {name ,email} = resultRegister
 
   sendResponse(res, {
     success: true,
@@ -20,9 +19,9 @@ const login = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthServices.login(req.body);
 
   sendResponse(res, {
-    statusCode: StatusCodes.ACCEPTED,
+    statusCode: StatusCodes.OK,
     success: true,
-    message: 'User logged in successfully',
+    message: 'Login successful',
     data: { token: result?.token },
   });
 });

@@ -14,22 +14,12 @@ const auth = (...requiredRole: string[]) => {
       throw new AppError(StatusCodes.UNAUTHORIZED, 'You are not Authorized!');
     }
 
-    // if (!token || !token.startsWith('Bearer')) {
-    //   throw new AppError(StatusCodes.UNAUTHORIZED, 'Access token is missing');
-    // }
-
-    // const splitToken = token.split(' ')[1];
-
-    // console.log(splitToken);
-
     const decoded = jwt.verify(
       token,
       config.jwt_access_secret as string,
     ) as JwtPayload;
 
     const { email, role } = decoded;
-
-    // req.user = { id, email, role };
 
     const user = await User.findOne({ email });
 
@@ -46,9 +36,8 @@ const auth = (...requiredRole: string[]) => {
     if (requiredRole && !requiredRole.includes(role)) {
       throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized');
     }
-    req.user = decoded as JwtPayload;
 
-    // console.log(req.user);
+    req.user = decoded as JwtPayload;
 
     next();
   });

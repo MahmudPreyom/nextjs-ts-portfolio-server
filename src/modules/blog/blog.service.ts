@@ -1,7 +1,6 @@
 import QueryBuilder from '../../app/builder/QueryBuilder';
 import AppError from '../../app/errors/AppError';
 import { User } from '../user/user.model';
-// import { User } from '../user/user.model';
 import { BlogSearchableFields } from './blog.const';
 import { TBlog } from './blog.interface';
 import { BlogModel } from './blog.model';
@@ -16,15 +15,15 @@ const createBlogIntoDB = async (payload: TBlog, id: string) => {
     'author',
     'name email role',
   );
-  // const author = payload?.author;
-  // const authorData = await User.findOne({ author });
-  // const result = await BlogModel.create(payload);
-  // return { result, authorData };
+
   return result;
 };
 
 const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
-  const courseQuery = new QueryBuilder(BlogModel.find().populate('user'), query)
+  const courseQuery = new QueryBuilder(
+    BlogModel.find().populate('author'),
+    query,
+  )
     .search(BlogSearchableFields)
     .filter()
     .sort()
@@ -58,42 +57,26 @@ const updateBlogInDB = async (
     runValidators: true,
   });
 
-  // const author = await User.findOne(blog.author);
-
   return result;
 };
 
-const deleteBlogFromDB = async (
-  id: string,
-  userId: string,
-  // userRole: string,
-) => {
+const deleteBlogFromDB = async (id: string, userId: string) => {
   const deleteBlogId = await BlogModel.findById(id);
-  console.log(deleteBlogId);
 
   if (!deleteBlogId) {
     throw new AppError(StatusCodes.NOT_FOUND, 'Blog not found');
   }
 
-  // if (userRole !== 'admin') {
   if (deleteBlogId?.author.toString() !== userId) {
     throw new AppError(
       StatusCodes.FORBIDDEN,
       'You are not authorized to delete this blog',
     );
   }
-  // }
 
   const result = await BlogModel.findByIdAndDelete(id);
   return result;
 };
-
-// if (deleteBlogId?.author.toString() !== userId) {
-//   throw new AppError(
-//     StatusCodes.FORBIDDEN,
-//     'You are not authorized to update this blog',
-//   );
-// }
 
 export const blogServices = {
   createBlogIntoDB,

@@ -40,7 +40,6 @@ const updateUserBlockStatusIntoDb = async (id: string) => {
 
 const deleteBlogFromDBByAdmin = async (id: string, userRole: string) => {
   const deleteBlogId = await BlogModel.findById(id);
-  console.log(deleteBlogId);
 
   if (!deleteBlogId) {
     throw new AppError(StatusCodes.NOT_FOUND, 'Blog not found');

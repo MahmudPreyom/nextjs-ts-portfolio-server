@@ -7,21 +7,10 @@ import { StatusCodes } from 'http-status-codes';
 import AppError from '../../app/errors/AppError';
 
 const createBlog = catchAsync(async (req, res) => {
-  // const { result, authorData } = await blogServices.createBlogIntoDB(req.body);
-  // const userId = req.user?._id;
-  // const { title, content } = req.body;
-
-  // const blog = await blogServices.createBlogIntoDB({
-  //   title,
-  //   content,
-  //   // author: userId,
-  //   isPublished: false,
-  // });
   const author = req.user?._id;
-  // console.log(author);
 
   if (!author) {
-    throw new Error('User not authenticated');
+    throw new AppError(StatusCodes.UNAUTHORIZED, 'User not authenticated');
   }
 
   const blogData = {
@@ -32,16 +21,15 @@ const createBlog = catchAsync(async (req, res) => {
   const result = await blogServices.createBlogIntoDB(blogData, author);
 
   sendResponse(res, {
-    statusCode: StatusCodes.OK,
+    statusCode: StatusCodes.CREATED,
     success: true,
-    message: 'Blog is created successfully',
-    data: result,
-    // data: {
-    //   _id: result._id,
-    //   title: result.title,
-    //   content: result?.content,
-    //   authorData,
-    // },
+    message: 'Blog created successfully',
+    data: {
+      _id: result._id,
+      title: result.title,
+      content: result?.content,
+      author: result?.author,
+    },
   });
 });
 
@@ -51,7 +39,7 @@ const getAllBlogs = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: 'Blogs are retrieved successfully',
+    message: 'Blogs fetched successfully',
     data: result,
   });
 });
@@ -60,34 +48,23 @@ const updateBlog = catchAsync(async (req, res) => {
   const { id } = req.params;
   const userId = req.user?._id;
   const result = await blogServices.updateBlogInDB(id, userId, req.body);
-  // const blogId = req.params.id;
-  console.log(userId);
-
-  // if (result?.author.toString() !== userId.toString()) {
-  //   throw new AppError(StatusCodes.BAD_REQUEST, 'You are not authorized');
-  // }
-  // console.log(userId);
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
     message: 'Blog updated successfully',
-    data: result,
-    // data: {
-    //   _id: result?._id,
-    //   title: result?.title,
-    //   content: result?.content,
-    //   author: author,
-    // },
+    data: {
+      _id: result?._id,
+      title: result?.title,
+      content: result?.content,
+      author: result?.author,
+    },
   });
 });
 
 const deleteBlog = catchAsync(async (req, res) => {
   const { id } = req.params;
   const userId = req.user?._id;
-  // const userRole = req.user?.role;
-  // console.log(userId);
-  // console.log(userRole);
 
   const result = await blogServices.deleteBlogFromDB(id, userId);
 
