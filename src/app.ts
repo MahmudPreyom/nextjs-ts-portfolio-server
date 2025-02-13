@@ -4,6 +4,7 @@ import userRoutes from './modules/user/user.routes';
 import authRoutes from './modules/auth/auth.routes';
 import globalErrorHandler from './middlewares/globalErrorHandler';
 import blogRoutes from './modules/blog/blog.routes';
+import ProjectsRoutes from './modules/project/project.routes';
 
 const app: Application = express();
 
@@ -13,6 +14,7 @@ app.use(cors());
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/blogs', blogRoutes);
+app.use('/api/projects', ProjectsRoutes);
 app.use('/api/admin/blogs', userRoutes);
 app.use('/api/admin/users', userRoutes);
 

@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose';
-import { TBlog } from './blog.interface';
+import { TProject } from './project.interface';
 
-const blogModelSchema = new Schema<TBlog>(
+const ProjectModelSchema = new Schema<TProject>(
   {
     title: {
       type: String,
@@ -15,13 +15,16 @@ const blogModelSchema = new Schema<TBlog>(
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
-    blogImage: {
-      type: String
-    }
+    projectImage: {
+      type: String,
+    },
+    liveLinkUrl: {
+      type: String,
+    },
   },
   {
     timestamps: true,
   },
 );
 
-export const BlogModel = model<TBlog>('Blog', blogModelSchema);
+export const ProjectModel = model<TProject>('Project', ProjectModelSchema);

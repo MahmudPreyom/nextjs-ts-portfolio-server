@@ -34,7 +34,7 @@ const updateUserBlockStatus = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: 'Users blocked successfully',
+    message: 'User blocked successfully',
   });
 });
 

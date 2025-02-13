@@ -1,29 +1,29 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { blogServices } from './blog.service';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { StatusCodes } from 'http-status-codes';
 import AppError from '../../app/errors/AppError';
+import { ProjectServices } from './project.service';
 
-const createBlog = catchAsync(async (req, res) => {
+const createProject = catchAsync(async (req, res) => {
   const author = req.user?._id;
 
   if (!author) {
     throw new AppError(StatusCodes.UNAUTHORIZED, 'User not authenticated');
   }
 
-  const blogData = {
+  const projectData = {
     ...req.body,
     author: author,
   };
 
-  const result = await blogServices.createBlogIntoDB(blogData, author);
+  const result = await ProjectServices.createProjectIntoDB(projectData, author);
 
   sendResponse(res, {
     statusCode: StatusCodes.CREATED,
     success: true,
-    message: 'Blog created successfully',
+    message: 'Project created successfully',
     data: {
       _id: result._id,
       title: result.title,
@@ -33,37 +33,37 @@ const createBlog = catchAsync(async (req, res) => {
   });
 });
 
-const getAllBlogs = catchAsync(async (req, res) => {
-  const result = await blogServices.getAllBlogsFromDB(req.query);
+const getAllProjects = catchAsync(async (req, res) => {
+  const result = await ProjectServices.getAllProjectsFromDB(req.query);
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: 'Blogs fetched successfully',
+    message: 'Project fetched successfully',
     data: result,
   });
 });
 
-const getSingleBlog = catchAsync(async (req, res) => {
+const getSingleProject = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const result = await blogServices.getSingleBlogFromDB(id);
+  const result = await ProjectServices.getSingleProjectFromDB(id);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: 'Blogs fetched successfully',
+    message: 'Project fetched successfully',
     data: result,
   });
 });
 
-const updateBlog = catchAsync(async (req, res) => {
+const updateProject = catchAsync(async (req, res) => {
   const { id } = req.params;
   const userId = req.user?._id;
-  const result = await blogServices.updateBlogInDB(id, userId, req.body);
+  const result = await ProjectServices.updateProjectInDB(id, userId, req.body);
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: 'Blog updated successfully',
+    message: 'Project updated successfully',
     data: {
       _id: result?._id,
       title: result?.title,
@@ -73,11 +73,11 @@ const updateBlog = catchAsync(async (req, res) => {
   });
 });
 
-const deleteBlog = catchAsync(async (req, res) => {
+const deleteProject = catchAsync(async (req, res) => {
   const { id } = req.params;
   const userId = req.user?._id;
 
-  const result = await blogServices.deleteBlogFromDB(id, userId);
+  const result = await ProjectServices.deleteProjectFromDB(id, userId);
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
@@ -86,10 +86,10 @@ const deleteBlog = catchAsync(async (req, res) => {
   });
 });
 
-export const blogController = {
-  createBlog,
-  getAllBlogs,
-  updateBlog,
-  deleteBlog,
-  getSingleBlog,
+export const ProjectController = {
+  createProject,
+  getAllProjects,
+  updateProject,
+  deleteProject,
+  getSingleProject,
 };

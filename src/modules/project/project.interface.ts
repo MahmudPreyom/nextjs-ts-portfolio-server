@@ -1,8 +1,9 @@
 import { Types } from 'mongoose';
 
-export type TBlog = {
+export type TProject = {
   title: string;
   description: string;
   author: Types.ObjectId;
-  blogImage: string;
+  projectImage: string;
+  liveLinkUrl: string;
 };

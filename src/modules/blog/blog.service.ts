@@ -33,6 +33,11 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
   return result;
 };
 
+const getSingleBlogFromDB = async (id: string) => {
+  const result = await BlogModel.findById(id);
+  return result;
+};
+
 const updateBlogInDB = async (
   id: string,
   userId: string,
@@ -83,4 +88,5 @@ export const blogServices = {
   getAllBlogsFromDB,
   updateBlogInDB,
   deleteBlogFromDB,
+  getSingleBlogFromDB,
 };

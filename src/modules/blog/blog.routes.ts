@@ -14,6 +14,7 @@ blogRoutes.post(
 );
 
 blogRoutes.get('/', blogController.getAllBlogs);
+blogRoutes.get('/singleBlog/:id', blogController.getSingleBlog);
 
 blogRoutes.patch('/:id', auth('user'), blogController.updateBlog);
 
